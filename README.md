@@ -9,7 +9,7 @@ Visualize set intersections.
 ## Installation
 To install, just run:
 ```
-pip install hoop-diagram
+pip install hoop_diagram
 ```
 ## Usage
 ```python

@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "hoop_diagram"
 version = "0.0.1"
@@ -5,14 +9,19 @@ authors = [
     { name="Yannik T. H. Schelske", email="yannik@yths.de" },
 ]
 description = "Visualize set intersections."
-readme = "README.md"
+readme = { file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+license = { file = "LICENSE.md", content-type = "text/markdown"}
+dependencies = [
+    "pycairo==1.26.1",
+    "pillow==10.3.0",
+]
 
 [project.urls]
-Homepage = "https://github.com/yths/hoop_diagram"
-Issues = "https://github.com/yths/hoop_diagram/issues"
+Homepage = "https://github.com/yths/hoop-diagram"
+Issues = "https://github.com/yths/hoop-diagram/issues"

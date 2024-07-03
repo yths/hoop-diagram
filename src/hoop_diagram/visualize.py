@@ -34,7 +34,12 @@ class Hoop:
         self.highlighted_set = None
 
     def _render(
-        self, width: int = 1024, height: int = 1024, highlighted_element: object = None, highlighted_set: object = None, path : str = None
+        self,
+        width: int = 1024,
+        height: int = 1024,
+        highlighted_element: object = None,
+        highlighted_set: object = None,
+        path: str = None,
     ) -> None:
         COLOR_THEME = {
             0: "#D00000",
@@ -106,14 +111,13 @@ class Hoop:
             idx = self.sets.index(highlighted_set)
             for i in range(self.n):
                 ctx.arc(
-                        0.5,
-                        0.5,
-                        INNER_RADIUS + (i + 0.5) * grid_radius_step_size,
-                        (idx - 0.5) * set_size,
-                        (idx + 0.5) * set_size,
-                    )
+                    0.5,
+                    0.5,
+                    INNER_RADIUS + (i + 0.5) * grid_radius_step_size,
+                    (idx - 0.5) * set_size - math.pi / 2 + 0.5 * set_size,
+                    (idx + 0.5) * set_size - math.pi / 2 + 0.5 * set_size,
+                )
                 ctx.stroke()
-
 
         ctx.set_line_width(ELEMENT_WIDTH)
         for i, s in enumerate(self.sets):
@@ -129,8 +133,8 @@ class Hoop:
                     0.5,
                     0.5,
                     INNER_RADIUS + (idx + 0.5) * grid_radius_step_size,
-                    (i - 0.5) * set_size,
-                    (i + 0.5) * set_size,
+                    (i - 0.5) * set_size - math.pi / 2 + 0.5 * set_size,
+                    (i + 0.5) * set_size - math.pi / 2 + 0.5 * set_size,
                 )
                 ctx.stroke()
 
@@ -139,7 +143,7 @@ class Hoop:
         for i in range(len(self.sets)):
             ctx.save()
             ctx.translate(0.5, 0.5)
-            ctx.rotate(set_size * i - 0.5 * set_size)
+            ctx.rotate(set_size * i + math.pi)
             ctx.move_to(0, INNER_RADIUS)
             ctx.line_to(0, OUTER_RADIUS)
             ctx.stroke()
@@ -170,17 +174,25 @@ class Hoop:
             idx = self.sets.index(highlighted_set)
 
             ctx.arc(
-                0.5, 0.5, INNER_RADIUS, (idx - 0.5) * set_size, (idx + 0.5) * set_size
+                0.5,
+                0.5,
+                INNER_RADIUS,
+                (idx - 0.5) * set_size - math.pi / 2 + 0.5 * set_size,
+                (idx + 0.5) * set_size - math.pi / 2 + 0.5 * set_size,
             )
             ctx.stroke()
             ctx.arc(
-                0.5, 0.5, OUTER_RADIUS, (idx - 0.5) * set_size, (idx + 0.5) * set_size
+                0.5,
+                0.5,
+                OUTER_RADIUS,
+                (idx - 0.5) * set_size - math.pi / 2 + 0.5 * set_size,
+                (idx + 0.5) * set_size - math.pi / 2 + 0.5 * set_size,
             )
             ctx.stroke()
-            for i in range(idx-1, idx + 1):
+            for i in range(idx, idx + 2):
                 ctx.save()
                 ctx.translate(0.5, 0.5)
-                ctx.rotate(set_size * i - 0.5 * set_size)
+                ctx.rotate(set_size * i + math.pi)
                 ctx.move_to(0, INNER_RADIUS)
                 ctx.line_to(0, OUTER_RADIUS)
                 ctx.stroke()
@@ -197,7 +209,12 @@ class Hoop:
             self.highlighted_element = None
 
     def show(self, width: int = 1024, height: int = 1024) -> None:
-        self._render(width=width, height=height, highlighted_element=self.highlighted_element, highlighted_set=self.highlighted_set)
+        self._render(
+            width=width,
+            height=height,
+            highlighted_element=self.highlighted_element,
+            highlighted_set=self.highlighted_set,
+        )
         size = (self.surface.get_width(), self.surface.get_height())
         stride = self.surface.get_stride()
         with self.surface.get_data() as memory:
@@ -207,16 +224,22 @@ class Hoop:
         image.show()
 
     def save(self, path: str, width: int = 1024, height: int = 1024) -> None:
-        self._render(width=width, height=height, highlighted_element=self.highlighted_element, highlighted_set=self.highlighted_set, path=path)
+        self._render(
+            width=width,
+            height=height,
+            highlighted_element=self.highlighted_element,
+            highlighted_set=self.highlighted_set,
+            path=path,
+        )
 
 
 if __name__ == "__main__":
     import os
 
-    d = Hoop(sets=[{1, 2}, {3, 4}, {1, 3, 5}, {1, 5}])
+    d = Hoop(sets=[{1, 2}, {3, 4}, {1, 3, 5}, {1, 3}, {1, 3}])
     d.save(os.path.join("assets", "standard.svg"), width=256, height=256)
     d.highlight_element(5)
-    d.save(os.path.join("assets", "highlighted_element.svg"), width=256, height=256)
-    d.highlight_set({1, 2})
-    d.save(os.path.join("assets", "highlighted_set.svg"), width=256, height=256)
     d.show()
+    d.save(os.path.join("assets", "highlighted_element.svg"), width=256, height=256)
+    d.highlight_set({3, 4})
+    d.save(os.path.join("assets", "highlighted_set.svg"), width=256, height=256)

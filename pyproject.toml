@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hoop-diagram"
-version = "0.0.5"
+version = "0.0.6"
 authors = [
     { name="Yannik T. H. Schelske", email="yannik@yths.de" },
 ]
@@ -18,8 +18,8 @@ classifiers = [
 ]
 license = { text = "MIT License"}
 dependencies = [
-    "pycairo==12.2.0",
-    "pillow==1.29.0",
+    "pillow==12.2.0",
+    "pycairo==1.29.0",
 ]
 keywords = ["Visualization", "Set", "Hoop Diagram", "Linear Diagram", "Set Visualization", "SVG"]
 
